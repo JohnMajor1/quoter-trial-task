@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class VoteDto {
 
-  private long id;
-  private long voterId;
-  private long quoteId;
+  private Long id;
+  private Long voterId;
+  private Long quoteId;
   private int value;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)

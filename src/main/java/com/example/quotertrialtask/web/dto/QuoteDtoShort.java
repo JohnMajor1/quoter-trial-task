@@ -7,9 +7,9 @@ import lombok.Data;
 @Builder
 public class QuoteDtoShort {
 
-  private long id;
-  private long authorId;
-  private long score;
+  private Long id;
+  private Long authorId;
+  private Long score;
   private String content;
 
 }

@@ -18,7 +18,7 @@ public class QuoteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ID")
-  private long id;
+  private Long id;
 
   @Column(name = "CONTENT")
   private String content;
@@ -36,9 +36,9 @@ public class QuoteEntity {
   @OneToMany(mappedBy = "quote", fetch = FetchType.LAZY)
   private List<VoteEntity> votes;
 
-  public long getScore() {
+  public Long getScore() {
     return votes.stream()
-      .mapToInt(VoteEntity::getVoiceValue)
+      .mapToLong(VoteEntity::getVoiceValue)
       .sum();
   }
 }

@@ -11,11 +11,11 @@ import java.util.List;
 @Data
 @Builder
 public class QuoteDtoFull {
-  private long id;
+  private Long id;
   private String content;
-  private long authorId;
+  private Long authorId;
   private List<VoteDto> votes;
-  private long score;
+  private Long score;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

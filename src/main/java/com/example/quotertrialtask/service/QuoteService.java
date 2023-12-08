@@ -1,26 +1,26 @@
 package com.example.quotertrialtask.service;
 
 import com.example.quotertrialtask.domain.QuoteEntity;
-import com.example.quotertrialtask.domain.VoteEntity;
+import com.example.quotertrialtask.web.dto.QuoteDtoShort;
 
 import java.util.List;
 
 public interface QuoteService {
 
 
-  QuoteEntity modifyQuote(long id, String content);
+  void modifyQuote(Long id, String content);
 
-  QuoteEntity getById(long id);
+  QuoteEntity getById(Long id);
 
-  QuoteEntity create(QuoteEntity quoteEntity, long authorId);
+  QuoteEntity create(QuoteDtoShort quote, Long authorId);
 
   QuoteEntity getRandomQuote();
 
-  VoteEntity upVote(long quoteId, long userId);
+  void upVote(Long quoteId, Long userId);
 
-  VoteEntity downVote(long quoteId, long userId);
+  void downVote(Long quoteId, Long userId);
 
-  List<QuoteEntity> getTop(long count);
+  List<QuoteEntity> getTop(Long count);
 
-  List<QuoteEntity> getWorse(long count);
+  List<QuoteEntity> getWorse(Long count);
 }

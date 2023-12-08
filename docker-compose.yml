@@ -1,0 +1,17 @@
+version: '3.0'
+
+services:
+  client-service:
+    container_name: quoter-service
+    hostname: quoter-service
+    build: .
+    restart: on-failure
+    environment:
+      - SERVER_PORT=8000
+    ports:
+      - 8000:8000
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+

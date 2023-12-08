@@ -4,10 +4,6 @@ import com.example.quotertrialtask.domain.UserEntity;
 import com.example.quotertrialtask.domain.exceptions.EntityIsAlreadyExistsException;
 import com.example.quotertrialtask.domain.exceptions.ResourceNotFoundException;
 import com.example.quotertrialtask.repository.UserRepository;
-import com.example.quotertrialtask.web.dto.UserDtoFull;
-import com.example.quotertrialtask.web.dto.UserDtoShort;
-import com.example.quotertrialtask.web.mappers.quote.QuoteMapper;
-import com.example.quotertrialtask.web.mappers.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(readOnly = true)
-  public UserEntity getById(long userId) {
+  public UserEntity getById(Long userId) {
     return repository.findById(userId)
       .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " not found"));
   }

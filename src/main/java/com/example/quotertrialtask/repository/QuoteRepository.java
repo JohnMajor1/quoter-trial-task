@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface QuoteRepository extends JpaRepository<QuoteEntity, Long> {
 
-  Optional<QuoteEntity> findById(long id);
+  Optional<QuoteEntity> findById(Long id);
 
 }

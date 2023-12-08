@@ -6,6 +6,8 @@ import com.example.quotertrialtask.domain.VoteEntity;
 import com.example.quotertrialtask.domain.exceptions.ResourceNotFoundException;
 import com.example.quotertrialtask.repository.QuoteRepository;
 import com.example.quotertrialtask.repository.VoteRepository;
+import com.example.quotertrialtask.web.dto.QuoteDtoShort;
+import com.example.quotertrialtask.web.mappers.quote.QuoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class QuoteServiceImpl implements QuoteService {
-
+  private final QuoteMapper quoteMapper;
   private final QuoteRepository quoteRepository;
   private final UserService userService;
   private final VoteRepository voteRepository;
@@ -27,23 +29,24 @@ public class QuoteServiceImpl implements QuoteService {
 
   @Override
   @Transactional
-  public QuoteEntity modifyQuote(long id, String content) {
+  public void modifyQuote(Long id, String content) {
     QuoteEntity quoteEntity = getQuoteEntity(id);
     quoteEntity.setLastUpdated(LocalDateTime.now());
     quoteEntity.setContent(content);
 
-    return quoteRepository.save(quoteEntity);
+    quoteRepository.save(quoteEntity);
   }
 
   @Override
   @Transactional(readOnly = true)
-  public QuoteEntity getById(long id) {
+  public QuoteEntity getById(Long id) {
     return getQuoteEntity(id);
   }
 
   @Override
   @Transactional
-  public QuoteEntity create(QuoteEntity quoteEntity, long authorId) {
+  public QuoteEntity create(QuoteDtoShort quote, Long authorId) {
+    QuoteEntity quoteEntity = quoteMapper.toEntity(quote);
     UserEntity author = userService.getById(authorId);
     quoteEntity.setAuthor(author);
     quoteEntity.setCreated(LocalDateTime.now());
@@ -67,12 +70,12 @@ public class QuoteServiceImpl implements QuoteService {
 
   @Override
   @Transactional
-  public VoteEntity upVote(long quoteId, long userId) {
+  public void upVote(Long quoteId, Long userId) {
     VoteEntity voteEntity = voteRepository.findByVoterIdAndQuoteId(quoteId, userId).orElse(null);
     if (voteEntity == null) {
       UserEntity userEntity = userService.getById(userId);
       QuoteEntity quoteEntity = getById(quoteId);
-      return voteRepository.save(VoteEntity.builder()
+      voteRepository.save(VoteEntity.builder()
         .quote(quoteEntity)
         .voter(userEntity)
         .voiceValue(1)
@@ -84,18 +87,17 @@ public class QuoteServiceImpl implements QuoteService {
         voteEntity.setVoiceValue(currentVoiceValue + 1);
         voteRepository.save(voteEntity);
       }
-      return voteEntity;
     }
   }
 
   @Override
   @Transactional
-  public VoteEntity downVote(long quoteId, long userId) {
+  public void downVote(Long quoteId, Long userId) {
     VoteEntity voteEntity = voteRepository.findByVoterIdAndQuoteId(quoteId, userId).orElse(null);
     if (voteEntity == null) {
       UserEntity userEntity = userService.getById(userId);
       QuoteEntity quoteEntity = getById(quoteId);
-      return voteRepository.save(VoteEntity.builder()
+      voteRepository.save(VoteEntity.builder()
         .quote(quoteEntity)
         .voter(userEntity)
         .voiceValue(-1)
@@ -107,35 +109,28 @@ public class QuoteServiceImpl implements QuoteService {
         voteEntity.setVoiceValue(currentVoiceValue - 1);
         voteRepository.save(voteEntity);
       }
-      return voteEntity;
     }
   }
 
   @Override
   @Transactional(readOnly = true)
-  public List<QuoteEntity> getTop(long count) {
-    return quoteRepository.findAll().stream()
-      .sorted(Comparator.comparing(QuoteEntity::getScore))
-      .limit(count)
-      .toList();
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<QuoteEntity> getWorse(long count) {
+  public List<QuoteEntity> getTop(Long count) {
     return quoteRepository.findAll().stream()
       .sorted(Comparator.comparing(QuoteEntity::getScore).reversed())
       .limit(count)
       .toList();
   }
 
-  private QuoteEntity vote(long quoteId, boolean thumbsUp) {
-    QuoteEntity quoteEntity = getQuoteEntity(quoteId);
-
-    return quoteRepository.save(quoteEntity);
+  @Override
+  @Transactional(readOnly = true)
+  public List<QuoteEntity> getWorse(Long count) {
+    return quoteRepository.findAll().stream()
+      .sorted(Comparator.comparing(QuoteEntity::getScore))
+      .limit(count)
+      .toList();
   }
 
-  private QuoteEntity getQuoteEntity(long id) {
+  private QuoteEntity getQuoteEntity(Long id) {
     return quoteRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Quote with id " + id + " not found"));
   }

@@ -17,7 +17,7 @@ public class VoteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ID")
-  private long id;
+  private Long id;
 
   @Column(name = "VOICE_VALUE")
   private int voiceValue;

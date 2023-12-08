@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface VoteRepository extends JpaRepository<VoteEntity, Long> {
-  Optional<VoteEntity> findByVoterIdAndQuoteId(long voterId, long quoterId);
+  Optional<VoteEntity> findByVoterIdAndQuoteId(Long voterId, Long quoterId);
 }

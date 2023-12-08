@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class UserDtoFull {
 
-  private long id;
+  private Long id;
 
   private String name;
 

@@ -1,15 +1,16 @@
 package com.example.quotertrialtask.web.dto;
 
-
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class UserDtoShort {
+public class QuoteModifyDto {
 
   private Long id;
-  private String name;
-  private String email;
-  private String password;
+
+  @NotNull
+  private String content;
+
 }
